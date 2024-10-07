@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js2.js"></script>
+</head>
+<body>
+    <form id="sanyi">
+        
+        Name:
+        <br>
+        <input type="text" minlength="10" id="name" required>
+        <br>
+        Age:
+        <br>
+        <input type="number" min="0" max="120" required>
+        <br>
+        Workplace:
+        <br>
+        <input type="text" minlength="5" required>
+        <br>
+        Salary (K Ft):
+        <br>
+        <input type="number" min="200" required>
+        <br>
+        Job description:
+        <br>
+        <textarea type="text" minlength="200"></textarea>
+        <br>
+        Highest level of education:
+        <br>
+        <select >
+            <option>elementary school</option>
+            <option>graduation</option>
+            <option>college (BSc)</option>
+            <option>university (MSc)</option>
+        </select>
+        <br>
+        Gender:
+        <br>
+        <input type="checkbox">Male
+        <br>
+        <input type="checkbox">Female
+        <br>
+        <input type="button" value="Send" onclick="checkAll()">
+    </form>
+</body>
+</html>
