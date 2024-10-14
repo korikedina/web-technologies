@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="js2.js"></script>
+    <style>
+        .error{
+            border-color: red;
+        }
+    </style>
 </head>
 <body>
     <form id="sanyi">
@@ -16,19 +21,19 @@
         <br>
         Age:
         <br>
-        <input type="number" min="0" max="120" required>
+        <input type="number" min="0" max="120" id="age" required>
         <br>
         Workplace:
         <br>
-        <input type="text" minlength="5" required>
+        <input type="text" minlength="5" id="wp" required>
         <br>
         Salary (K Ft):
         <br>
-        <input type="number" min="200" required>
+        <input type="number" min="200" id="salary" required>
         <br>
         Job description:
         <br>
-        <textarea type="text" minlength="200"></textarea>
+        <textarea type="text" minlength="200" id="jd"></textarea>
         <br>
         Highest level of education:
         <br>
@@ -41,9 +46,9 @@
         <br>
         Gender:
         <br>
-        <input type="checkbox">Male
+        <input type="checkbox" id="gender">Male
         <br>
-        <input type="checkbox">Female
+        <input type="checkbox" id="gender">Female
         <br>
         <input type="button" value="Send" onclick="checkAll()">
     </form>
