@@ -1,0 +1,22 @@
+.avatar{
+    width: 200px;
+    height: 200px;
+    background-size:cover;
+    background-repeat: no-repeat;
+    float: left;
+    margin-right: 50px;
+}
+
+body{
+    margin-bottom: 50px;
+}
+
+.candidate-card{
+    margin: auto;
+    background-color: rgb(126, 169, 225);
+    width: 50%;
+    margin-top: 50px;
+}
+
+
+

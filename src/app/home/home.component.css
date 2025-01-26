@@ -1,0 +1,22 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#centerbox{
+    position: absolute;
+    bottom: 15%;
+    left: 0;
+    width: 100vw;
+    padding-left: 10%;
+    background-color: #000000d0;
+}
+
+#bruh{
+    color: white;
+    background-image: url("../../assets/images/fooldal1.webp");
+    background-repeat: no-repeat;
+    background-size:cover;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+}

@@ -1,0 +1,27 @@
+<div *ngIf="candidateList.length > 0; else noCandidates">
+    <div class="candidate-cards">
+      <mat-card *ngFor="let candidate of candidateList" class="candidate-card">
+            <mat-card-header>
+              <div 
+                mat-card-avatar 
+                class="avatar" 
+                [style.backgroundImage]="'url(' + candidate.photo + ')'"
+                [style.backgroundPositionY.px]="candidate.photodisplacement">
+              </div>
+              <div class="content">
+                <mat-card-title>{{ candidate.name }}</mat-card-title>
+                <mat-card-subtitle>"{{ candidate.moto }}"</mat-card-subtitle>
+                <p class="additional-info">{{ candidate.crimes }}</p>
+                <button mat-fab extended>
+                    <mat-icon>favorite</mat-icon>
+                    Tetszik
+                  </button>
+              </div>
+            </mat-card-header>
+          </mat-card>
+          
+    </div>
+  </div>
+  <ng-template #noCandidates>
+    <p>No candidates found!</p>
+  </ng-template>
