@@ -3,11 +3,12 @@ import { Component } from "@angular/core";
 import { MatCardModule } from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIcon, MatIconModule} from '@angular/material/icon';
+import { MenuComponent } from "../shared/menu/menu.component";
 
 @Component({
   selector: 'app-candidates',
   standalone: true,
-  imports: [NgFor, NgIf, MatCardModule, MatButtonModule, MatIconModule],
+  imports: [NgFor, NgIf, MatCardModule, MatButtonModule, MatIconModule, MenuComponent],
   styleUrls: ['./candidates.component.css'],
   templateUrl: './candidates.component.html'
 })

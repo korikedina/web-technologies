@@ -2,3 +2,7 @@ body{
     overflow: visible;
     height: fit-content;
 }
+
+.errormsg{
+    color: red;
+}

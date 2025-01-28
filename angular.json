@@ -31,7 +31,9 @@
               "@angular/material/prebuilt-themes/azure-blue.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/jquery-3.7.1.min.js"
+            ]
           },
           "configurations": {
             "production": {

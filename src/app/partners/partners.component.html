@@ -1,0 +1,24 @@
+<app-menu></app-menu>
+<div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Sorszám</th>
+          <th>Partner neve</th>
+          <th>Partner címe</th>
+          <th>Weboldal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let partner of partners">
+          <td>{{ partner.id }}</td>
+          <td>{{ partner.name }}</td>
+          <td>{{ partner.address }}</td>
+          <td>
+            <a [href]="partner.website" target="_blank">{{ partner.website }}</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
