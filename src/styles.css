@@ -3,3 +3,61 @@ body{
 }
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-drawer-inner-container{
+    background-color: cadetblue;
+  }
+
+  .sidenav-container {
+    height: 100vw;
+    top: 0;
+    left: 0;
+  
+  }
+  mat-toolbar{
+    background-color: transparent;
+  }
+
+  mat-sidenav-container{
+    background-color: transparent;
+  }
+
+  nav{
+    margin-top: 70px;
+  }
+  
+  nav ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  nav ul li {
+    padding: 16px;
+  }
+  
+  nav ul li a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .favicon{
+    color: red;
+  }
+
+  mat-toolbar{
+    background-color: transparent;
+  }
+  
+  
+  mat-toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+  }
+  
+  mat-sidenav {
+    width: 250px;
+  }
+  

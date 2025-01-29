@@ -13,7 +13,7 @@
                 <mat-card-title>{{ candidate.name }}</mat-card-title>
                 <mat-card-subtitle>"{{ candidate.moto }}"</mat-card-subtitle>
                 <p class="additional-info">{{ candidate.crimes }}</p>
-                <button mat-fab extended>
+                <button mat-fab extended (click)="like(candidate.id)" id="like-{{candidate.id}}">
                     <mat-icon>favorite</mat-icon>
                     Tetszik
                   </button>

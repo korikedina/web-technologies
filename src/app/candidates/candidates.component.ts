@@ -13,6 +13,15 @@ import { MenuComponent } from "../shared/menu/menu.component";
   templateUrl: './candidates.component.html'
 })
 export class CandidatesComponent {
+  like(id:number){
+    let child=$(`#like-${id}`).children()[1];
+    if(child.classList.contains('favicon')){
+      child.classList.remove('favicon');
+    }
+    else{
+      child.classList.add('favicon');
+    }
+  }
   candidateList = [
     {
       id: 1,

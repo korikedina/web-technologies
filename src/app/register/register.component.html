@@ -53,7 +53,7 @@
                         </div>
                       </div>
                     <div>
-                        <button mat-button matStepperNext>Next</button>
+                        <button mat-button matStepperNext id="firstbt">Next</button>
                     </div>
 
                 </form>
@@ -90,7 +90,7 @@
                         <label for="profilePic" class="form-label">Profilkép feltöltése:</label>
                         <input type="file" id="profilePic" name="img" class="form-control" accept="image/*">
                     </div>
-                    <button type="submit" class="btn btn-primary w-100">Regisztrálok!</button>
+                    <button type="submit" class="btn btn-primary w-100" [routerLink]="['/candidates']">Regisztrálok!</button>
                 </form>
             </mat-step>
         </mat-stepper>          

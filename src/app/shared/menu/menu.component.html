@@ -1,8 +1,22 @@
-<nav *ngIf="showMenu">
-    <ul>
-      <li><a routerLink="/candidates">Candidates</a></li>
-      <li><a routerLink="/rules">Rules</a></li>
-      <li><a routerLink="/partners">Partners</a></li>
-    </ul>
-  </nav>
-  
+
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="toggleSidenav()">
+    <mat-icon>menu</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="side" [opened]="showMenu">
+    <nav>
+      <ul>
+        <li><a [routerLink]="['/candidates']">Jelöltek</a></li>
+        <li><a [routerLink]="['/rules']">Szabályzat</a></li>
+        <li><a [routerLink]="['/partners']">Partnereink</a></li>
+      </ul>
+    </nav>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

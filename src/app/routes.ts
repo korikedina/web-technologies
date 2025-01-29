@@ -7,14 +7,29 @@ import { PartnersComponent } from './partners/partners.component';
 
 const routeConfig: Routes = [
     {
-        path: '', 
-        component: RulesComponent,
-        title: 'Home Page'
+      path: '', 
+      component: HomeComponent,
+      title: 'BűnTárs'
     },
     {
       path: 'register',
       component: RegisterComponent,
-      title: 'Register page'
+      title: 'Regisztráció - bűnTárs'
+    },
+    {
+      path: 'rules',
+      component: RulesComponent,
+      title: 'Szabályzat - bűnTárs'
+    },
+    {
+      path: 'candidates',
+      component: CandidatesComponent,
+      title: 'Jelöltek - bűnTárs'
+    },
+    {
+      path: 'partners',
+      component: PartnersComponent,
+      title: 'Partnereink - bűnTárs'
     },
   ];
   

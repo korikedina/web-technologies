@@ -4,11 +4,13 @@ import { event } from 'jquery';
 import { MatStepperModule } from '@angular/material/stepper';
 import { Form, FormBuilder, FormGroup, Validators, FormControl, ReactiveFormsModule, FormsModule, AbstractControl, ValidationErrors, ValidatorFn, FormArray } from '@angular/forms';
 import { NgForOf } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
 
 
 @Component({
   selector: 'app-register',
-  imports: [MatTabsModule, MatStepperModule, ReactiveFormsModule, FormsModule, NgForOf],
+  imports: [MatTabsModule, MatStepperModule, ReactiveFormsModule, FormsModule, NgForOf, MatButtonModule, RouterModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
@@ -88,7 +90,7 @@ export class RegisterComponent implements OnInit {
           });
         }
         // Például egy gomb kattintás eseményének kezelése
-        $('button').click(function() {
+        $("#firstbt").click(function() {
           const firstname = (typeof $("#firstname").val() === "string" ? ($("#firstname").val() as string) : "").trim();
           const lastname = (typeof $("#lastname").val() === "string" ? ($("#lastname").val() as string) : "").trim();
           let errors=[];
