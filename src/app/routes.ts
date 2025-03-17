@@ -8,7 +8,7 @@ import { PartnersComponent } from './partners/partners.component';
 const routeConfig: Routes = [
     {
       path: '', 
-      component: HomeComponent,
+      component: CandidatesComponent,
       title: 'BűnTárs'
     },
     {

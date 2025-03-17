@@ -1,67 +1,42 @@
-import { NgFor, NgIf } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';  // <-- Import HttpClient
+import { MenuComponent } from '../shared/menu/menu.component';
 import { MatCardModule } from '@angular/material/card';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIcon, MatIconModule} from '@angular/material/icon';
-import { MenuComponent } from "../shared/menu/menu.component";
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-candidates',
-  standalone: true,
-  imports: [NgFor, NgIf, MatCardModule, MatButtonModule, MatIconModule, MenuComponent],
+  imports:[MenuComponent, MatCardModule, MatIcon], 
   styleUrls: ['./candidates.component.css'],
-  templateUrl: './candidates.component.html'
+  templateUrl: './candidates.component.html',
+  standalone: true,
+  providers: [HttpClient] 
 })
-export class CandidatesComponent {
-  like(id:number){
-    let child=$(`#like-${id}`).children()[1];
-    if(child.classList.contains('favicon')){
+export class CandidatesComponent implements OnInit {
+  candidateList: any[] = [];  // <-- Store the fetched data here
+
+  constructor(private http: HttpClient) {}  // <-- Inject HttpClient
+
+  ngOnInit(): void {
+    // Fetch data from the backend API
+    this.http.get<any[]>('http://localhost:3000/api/candidates')  // <-- Your backend URL
+      .subscribe(
+        (data) => {
+          this.candidateList = data;  // <-- Assign the response data to candidateList
+        },
+        (error) => {
+          console.error('Error fetching candidates:', error);  // <-- Handle errors
+        }
+      );
+  }
+
+  like(id: number): void {
+    // Your like button logic (no changes)
+    let child = $(`#like-${id}`).children()[1];
+    if (child.classList.contains('favicon')) {
       child.classList.remove('favicon');
-    }
-    else{
+    } else {
       child.classList.add('favicon');
     }
   }
-  candidateList = [
-    {
-      id: 1,
-      name: 'Lakatos Ronáldó',
-      moto: 'ojan aszszónyt zsretnék aki mozsfőz dagarít',
-      photo: '../../assets/images/dani.jpg',
-      photodisplacement:-45,
-      crimes: 'Bolti lopás, rablás, fizikai bántalmazás',
-    },
-    {
-      id: 2,
-      name: 'Lármás Károly',
-      moto: 'Törj ki a csendből, a sötétből, szeress szívből.',
-      photo: '../../assets/images/larmaskaroly.png',
-      photodisplacement:0,
-      crimes: 'Üzleti csalás, emberrablás',
-    },
-    {
-      id: 3,
-      name: 'Horvát Atilla',
-      moto: 'Az utca nevelt.',
-      photo: '../../assets/images/horvatattila.jpg',
-      photodisplacement:0,
-      crimes: 'Gyilkosság, késeléses támadás',
-    },
-    {
-      id: 4,
-      name: 'Oláh Alehandró',
-      moto: 'A legfontosabb, a család.',
-      photo: '../../assets/images/olahalehandro.png',
-      photodisplacement:0,
-      crimes: 'Családon belüli erőszak, fizikai bántalmazás',
-    },
-    {
-      id: 5,
-      name: 'Pat Tamás',
-      moto: 'Kutyából nem lesz szalonna',
-      photo: '../../assets/images/pattamas.jpeg',
-      photodisplacement:0,
-      crimes: 'Rosszabb',
-    },
-  ];
 }
