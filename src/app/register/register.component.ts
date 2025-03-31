@@ -40,11 +40,6 @@ export class RegisterComponent implements OnInit {
       lastName: this.lastname,
       //checkboxes: this.fb.array([], atLeastOneCheckedValidator()),
     });
-/*     onclick=()=>{
-      $("input[type=checkbox]").each((i, obj)=>{
-        console.log(i, (obj));
-      });
-    }; */
   }
 
 

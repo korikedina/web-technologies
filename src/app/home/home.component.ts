@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterModule, RouterOutlet],
+  imports: [RouterModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import {MatSidenavModule} from '@angular/material/sidenav';
@@ -10,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-menu',
-  imports:[NgIf, RouterModule, MatSidenavModule, MatIcon, MatToolbarModule, MatButtonModule,  MatIconModule],
+  imports:[RouterModule, MatSidenavModule, MatIcon, MatToolbarModule, MatButtonModule,  MatIconModule],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css'],
 })
