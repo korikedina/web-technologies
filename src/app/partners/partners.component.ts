@@ -2,13 +2,8 @@ import { NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MenuComponent } from "../shared/menu/menu.component";
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { UsersService } from '../users.service';
 
-interface Partner{
-  id: number,
-  name: string,
-  adress: string, 
-  website: string
-}
 
 @Component({
   selector: 'app-partners',
@@ -19,20 +14,18 @@ interface Partner{
 export class PartnersComponent implements OnInit {
   partners: any[]=[];
 
-  constructor(private http: HttpClient) {}
+  constructor(private usersService:UsersService) {}
 
   ngOnInit(): void {
     // Fetch data from the backend API
-    this.http.get<any[]>('/api/organizations')
+    this.getPartners();
+  }
+
+  getPartners(){
+    this.usersService.listPartners()
       .subscribe(
         (data) => {
-          // Map each partner object to exclude _id
-          this.partners = data.map(partner => ({
-            id: partner.id,
-            name: partner.name,
-            address: partner.address,
-            website: partner.website
-          }));
+          this.partners = data
         },
         (error) => {
           console.error('Error fetching partners:', error);

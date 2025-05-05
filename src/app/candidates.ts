@@ -1,8 +1,8 @@
 export interface Candidate {
-    id: number;
+    id: string;
     name: string;
-    moto: string;
+    motto: string;
     photo: string;
-    photodisplacement:number;
+    photodisplacement: number;
     crimes: string;
 }

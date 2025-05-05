@@ -1,102 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BűnTárs</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="container mt-4">
-    <div id="reg">
-        <mat-stepper linear #stepper id="stepper">
-            <mat-step [stepControl]="basicdata" [editable]="isEditable"> 
+<div class="container mt-4">
+    <mat-stepper linear #stepper>
+        <form [formGroup]="basicdata">
+            <mat-step [stepControl]="basicdata.get('step1')!" [editable]="isEditable">
                 <ng-template matStepLabel>Alapvető adatok</ng-template>
-                <h1 class="text-center mb-4">Alapvető adatok (kitöltése kötelező!)</h1>
-                <form id="basicdata" class="mb-4">
-                    <div class="mb-3">
-                        <label for="firstname" class="form-label">Név:</label>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <input type="text" id="firstname" name="firstname" class="form-control" placeholder="Vezetéknév" [formControl]="firstname">
-                                <p class="errormsg" hidden id="fnameerror">Legalább 1, maximum 20 karakter</p>
-                            </div>
-                            <div class="col-md-6">
-                                <input type="text" id="lastname" name="lastname" class="form-control" placeholder="Keresztnév" [formControl]="lastname">
-                                <p class="errormsg" hidden id="lnameerror">Legalább 1, maximum 20 karakter</p>
-                            </div>
-                        </div>
+                <div formGroupName="step1">
+                    <h1>Alapvető adatok (kitöltése kötelező!)</h1>
+                    <label>Név:</label>
+                    <div>
+                        <mat-form-field>
+                            <mat-label>Vezetéknév</mat-label>
+                            <input matInput formControlName="firstName">
+                            <mat-error *ngIf="isFieldInvalid('firstName', 'step1')">
+                                {{ getErrorMessage('firstName', 'step1') }}
+                            </mat-error>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Keresztnév</mat-label>
+                            <input matInput formControlName="lastName">
+                            <mat-error *ngIf="isFieldInvalid('lastName', 'step1')">
+                                {{ getErrorMessage('lastName', 'step1') }}
+                            </mat-error>
+                        </mat-form-field>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Nem:</label>
-                        <div class="form-check">
-                            <input type="radio" id="male" name="gender" value="male" class="form-check-input" checked>
-                            <label for="male" class="form-check-label">Férfi</label>
-                        </div>
-                        <div class="form-check">
-                            <input type="radio" id="female" name="gender" value="female" class="form-check-input">
-                            <label for="female" class="form-check-label">Nő</label>
-                        </div>
+                        <label>Nem:</label>
+                        <mat-radio-group formControlName="gender">
+                            <mat-radio-button value="male" class="me-3">Férfi</mat-radio-button>
+                            <mat-radio-button value="female">Nő</mat-radio-button>
+                        </mat-radio-group>
                     </div>
-                    <h2 class="mb-3">Elkövetett bűncselekmények</h2>
-                    <div *ngFor="let crime of crimes">
-                        <div class="form-check">
-                          <input
-                            type="checkbox"
-                            class="form-check-input"
-                            [value]="crime.id"
-                            id="crime-{{ crime.id }}" 
-                          />
-                          <label class="form-check-label" for="crime-{{ crime.id }}">
+                    
+                    <h2>Elkövetett bűncselekmények</h2>
+                    <div *ngFor="let crime of crimes; let i = index">
+                        <mat-checkbox [formControl]="getCheckboxControl(i)">
                             {{ crime.name }}
-                          </label>
-                        </div>
-                      </div>
-                    <div>
-                        <button mat-button matStepperNext id="firstbt">Next</button>
+                        </mat-checkbox>
                     </div>
-
-                </form>
+                    <mat-error *ngIf="isFormArrayInvalid()">
+                        Legalább egy bűncselekményt ki kell választania!
+                    </mat-error>
+                    
+                    <div>
+                        <button mat-raised-button color="primary" matStepperNext [disabled]="!isFirstStepValid()">
+                            Következő
+                        </button>
+                    </div>
+                </div>
             </mat-step>
 
-            <mat-step> 
+            <mat-step [stepControl]="basicdata.get('step2')!">
                 <ng-template matStepLabel>Börtönben töltött idő</ng-template>
-                <h2 class="mb-3">Börtönben töltött idő</h2>
-                <form class="mb-4">
+                <div formGroupName="step2">
+                    <h2>Börtönben töltött idő</h2>
                     <div class="mb-3">
-                        <label for="sentenceStart" class="form-label">Ítélet meghozatalának dátuma:</label>
-                        <input type="date" id="sentenceStart" name="sentenceStart" class="form-control">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Ítélet meghozatalának dátuma</mat-label>
+                            <input matInput type="date" formControlName="sentenceStart">
+                        </mat-form-field>
                     </div>
                     <div class="mb-3">
-                        <label for="releaseDate" class="form-label">Szabadulás dátuma:</label>
-                        <input type="date" id="releaseDate" name="releaseDate" class="form-control">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Szabadulás dátuma</mat-label>
+                            <input matInput type="date" formControlName="releaseDate">
+                        </mat-form-field>
                     </div>
                     <div>
-                        <button mat-button matStepperNext>Next</button>
+                        <button mat-button matStepperPrevious>Vissza</button>
+                        <button mat-raised-button color="primary" matStepperNext>Következő</button>
                     </div>
-                </form>
+                </div>
             </mat-step>
-
 
             <mat-step>
                 <ng-template matStepLabel>Profil</ng-template>
-                <h1 class="text-center mb-4">Profil testreszabása</h1>
-                <form class="mb-4">
+                <div formGroupName="step3">
+                    <h1>Profil testreszabása</h1>
                     <div class="mb-3">
-                        <label for="bio" class="form-label">Rövid bemutatkozás:</label>
-                        <textarea id="bio" name="message" rows="5" class="form-control" placeholder="Írj pár sort magadról!"></textarea>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Rövid bemutatkozás</mat-label>
+                            <textarea matInput formControlName="bio" rows="5" placeholder="Írj pár sort magadról!"></textarea>
+                        </mat-form-field>
                     </div>
                     <div class="mb-3">
-                        <label for="profilePic" class="form-label">Profilkép feltöltése:</label>
-                        <input type="file" id="profilePic" name="img" class="form-control" accept="image/*">
+                        <label for="profilePic">Profilkép feltöltése:</label>
+                        <input type="file" id="profilePic" accept="image/*" (change)="onFileSelected($event)">
                     </div>
-                    <button type="submit" class="btn btn-primary w-100" [routerLink]="['/candidates']">Regisztrálok!</button>
-                </form>
+                    <div>
+                        <button mat-button matStepperPrevious type="button">Vissza</button>
+                        <button mat-raised-button color="primary" 
+                                type="button" 
+                                [disabled]="!basicdata.valid"
+                                (click)="onSubmit()">
+                            Regisztrálok!
+                        </button>
+                    </div>
+                </div>
             </mat-step>
-        </mat-stepper>          
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    </div>
-</body>
-</html>
+        </form>
+    </mat-stepper>
+</div>

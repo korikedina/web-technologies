@@ -1,117 +1,155 @@
-import { Component, OnInit } from '@angular/core';
-import { MatTabsModule } from '@angular/material/tabs';
-import { event } from 'jquery';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray, FormControl, Validators, ReactiveFormsModule, AbstractControl, ValidatorFn } from '@angular/forms';
 import { MatStepperModule } from '@angular/material/stepper';
-import { Form, FormBuilder, FormGroup, Validators, FormControl, ReactiveFormsModule, FormsModule, AbstractControl, ValidationErrors, ValidatorFn, FormArray } from '@angular/forms';
-import { NgForOf } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { CommonModule } from '@angular/common';
+import { UsersService } from '../users.service';
+import { Router } from '@angular/router';
 
+interface Crime {
+  id: number;
+  name: string;
+}
+
+const atLeastOneSelected: ValidatorFn = (control: AbstractControl): {[key: string]: any} | null => {
+  const array = control as FormArray;
+  return array.controls.some(control => control.value) ? null : { noneSelected: true };
+};
 
 @Component({
   selector: 'app-register',
-  imports: [MatTabsModule, MatStepperModule, ReactiveFormsModule, FormsModule, NgForOf, MatButtonModule, RouterModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrls: ['./register.component.css'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatStepperModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatRadioModule,
+    MatCheckboxModule
+  ]
 })
-
-export class RegisterComponent implements OnInit {
-  crimes = [
-    { id: 1, name: 'Bolti lopás' },
+export class RegisterComponent {
+  basicdata: FormGroup;
+  isEditable = true;
+  crimes: Crime[] = [
+    { id: 1, name: 'Lopás' },
     { id: 2, name: 'Rablás' },
-    { id: 3, name: 'Üzleti csalás' },
-    { id: 4, name: 'Fizikai bántalmazás' },
-    { id: 5, name: 'Családon belüli erőszak' },
-    { id: 6, name: 'Késeléses támadás' },
-    { id: 7, name: 'Emberrablás' },
-    { id: 8, name: 'Gyilkosság' },
-    { id: 9, name: 'Szexuális erőszak' },
+    { id: 3, name: 'Szexuális erőszak' },
+    { id: 4, name: 'Gyilkosság' },
+    { id: 5, name: 'Késeléses támadás' },
+    { id: 6, name: 'Családon belüli erőszak' },
+    { id: 7, name: 'Fizikai bántalmazás' },
+    { id: 8, name: 'Üzleti csalás' },
+    { id: 9, name: 'Emberrablás' },
     { id: 10, name: 'Rosszabb' }
   ];
 
-  isEditable: boolean = true;
-  readonly firstname= new FormControl("", [Validators.required, Validators.minLength(1), Validators.maxLength(20)]);
-  readonly lastname= new FormControl("", [Validators.required, Validators.minLength(1), Validators.maxLength(20)]);
-  basicdata: FormGroup;
-
-  constructor(private fb: FormBuilder) {
-    this.basicdata = this.fb.group({
-      firstName: this.firstname,
-      lastName: this.lastname,
-      //checkboxes: this.fb.array([], atLeastOneCheckedValidator()),
+  constructor(
+    private formBuilder: FormBuilder,
+    private usersService: UsersService,
+    private router: Router
+  ) {
+    this.basicdata = this.formBuilder.group({
+      step1: this.formBuilder.group({
+        firstName: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]],
+        lastName: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(20)]],
+        gender: ['', Validators.required],
+        crimes: this.formBuilder.array(
+          this.crimes.map(() => new FormControl(false)),
+          [atLeastOneSelected]
+        )
+      }),
+      step2: this.formBuilder.group({
+        sentenceStart: [''],
+        releaseDate: ['']
+      }),
+      step3: this.formBuilder.group({
+        bio: [''],
+        profilePic: ['']
+      })
     });
   }
 
+  ngOnInit() {}
 
-  ngOnInit(): void {
+  getCheckboxControl(index: number): FormControl {
+    return (this.basicdata.get('step1.crimes') as FormArray).controls[index] as FormControl;
+  }
 
-      $(document).ready(function() {
-        
-        const fname=document.querySelector("#firstname") as HTMLInputElement;
-        if(fname){
-          fname.addEventListener('blur', (event) =>{
-            let fnameerrormsg = document.querySelector("#fnameerror") as HTMLElement;
-            let fnameinp = document.querySelector("#firstname") as HTMLElement;
+  isFieldInvalid(fieldName: string, stepName: string): boolean {
+    const field = this.basicdata.get(`${stepName}.${fieldName}`);
+    return field ? field.invalid && field.touched : false;
+  }
 
+  getErrorMessage(fieldName: string, stepName: string): string {
+    const field = this.basicdata.get(`${stepName}.${fieldName}`);
+    if (!field) return '';
+    
+    if (field.hasError('required')) return 'Mező kitöltése kötelező';
+    if (field.hasError('minlength')) return 'Túl rövid';
+    if (field.hasError('maxlength')) return 'Túl hosszú';
+    return '';
+  }
 
-            if(!fname || fname.value.length < 1 || fname.value.length > 20){
-              console.log(fname.parentElement)
-              fnameerrormsg.hidden = false;
-              fnameinp.style.borderColor="red";
-            }
-            else{
-             fnameerrormsg.hidden=true;
-             fnameinp.style.borderColor="#dee2e6"
-            }
-          });
+  isFormArrayInvalid(): boolean {
+    const crimes = this.basicdata.get('step1.crimes') as FormArray;
+    return crimes.hasError('noneSelected') && crimes.touched;
+  }
+
+  isFirstStepValid(): boolean {
+    const step1 = this.basicdata.get('step1');
+    return step1 ? step1.valid : false;
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    this.basicdata.get('step3.profilePic')?.setValue(file);
+  }
+
+  onSubmit() {
+    if (this.basicdata.valid) {
+      const formData = new FormData();
+      const formValue = this.basicdata.value;
+
+      // Add name (combining firstName and lastName)
+      const fullName = `${formValue.step1.firstName} ${formValue.step1.lastName}`;
+      formData.append('name', fullName);
+
+      // Add motto (bio from step3)
+      formData.append('motto', formValue.step3.bio || '');
+
+      // Add photo if selected
+      const profilePic = this.basicdata.get('step3.profilePic')?.value;
+      if (profilePic) {
+        formData.append('photo', profilePic);
+      }
+
+      // Add selected crimes
+      const selectedCrimes = formValue.step1.crimes
+        .map((checked: boolean, index: number) => checked ? this.crimes[index].name : null)
+        .filter((name: string | null) => name !== null)
+        .join(', ');
+      formData.append('crimes', selectedCrimes);
+
+      this.usersService.registerUser(formData).subscribe({
+        next: (response) => {
+          console.log('Registration successful', response);
+          // Add success handling here (e.g., show success message, redirect)
+        },
+        error: (error) => {
+          console.error('Registration failed', error);
+          // Add error handling here (e.g., show error message)
         }
-        const lname=document.querySelector("#lastname") as HTMLInputElement;
-        if(lname){
-          lname.addEventListener('blur', (event) =>{
-            let lnameerrormsg = document.querySelector("#lnameerror") as HTMLElement;
-            let lnameinp = document.querySelector("#lastname") as HTMLElement;
-
-            if(!lname || lname.value.length < 1 || lname.value.length > 20){
-              console.log(lname.parentElement)
-              lnameerrormsg.hidden = false;
-              lnameinp.style.borderColor="red";
-
-            }
-            else{
-              lnameerrormsg.hidden=true;
-              lnameinp.style.borderColor="#dee2e6";
-
-            }
-          });
-        }
-        // Például egy gomb kattintás eseményének kezelése
-        $("#firstbt").click(function() {
-          const firstname = (typeof $("#firstname").val() === "string" ? ($("#firstname").val() as string) : "").trim();
-          const lastname = (typeof $("#lastname").val() === "string" ? ($("#lastname").val() as string) : "").trim();
-          let errors=[];
-          let isValid=true;
-          // Validate First Name
-          if (!firstname || firstname.length < 1 || firstname.length > 20) {
-            isValid=false;
-            errors.push("A vezetéknévnek 1 és 20 karakter között kell lennie.");
-          }
-          if (!lastname || lastname.length < 1 || lastname.length > 20) {
-            isValid=false;
-            errors.push("A keresztnévnek 1 és 20 karakter között kell lennie.");
-          }
-          const crimeChecked = $("input[type='checkbox']:checked").length > 0;
-          if (!crimeChecked) {
-              isValid = false;
-              errors.push("Jelölj meg legalább egy bűncselekményt.");
-          }
-          if(!isValid){
-            alert(errors.join('\n'));
-          }
-          else{
-            //this.stepper.next();
-          }
       });
-    });
+      this.router.navigate(['/candidates']);
+    }
   }
-
 }

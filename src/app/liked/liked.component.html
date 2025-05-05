@@ -1,7 +1,7 @@
 <app-menu></app-menu>
-<div *ngIf="candidateList.length > 0; else noCandidates">
+<div *ngIf="likedUsers.length > 0; else noCandidates">
     <div class="candidate-cards">
-      <mat-card *ngFor="let candidate of candidateList" class="candidate-card">
+      <mat-card *ngFor="let candidate of likedUsers" class="candidate-card">
             <mat-card-header>
               <div 
                 mat-card-avatar 
@@ -14,7 +14,7 @@
                 <mat-card-subtitle>"{{ candidate.motto }}"</mat-card-subtitle>
                 <p class="additional-info">{{ candidate.crimes }}</p>
                 <button mat-fab extended (click)="like(candidate.id)" id="like-{{candidate.id}}">
-                    <mat-icon  [class.favicon]="likedIds.includes(candidate.id)">favorite</mat-icon>
+                    <mat-icon [class.favicon]="likedIds.includes(candidate.id)">favorite</mat-icon>
                     Tetszik
                   </button>
               </div>

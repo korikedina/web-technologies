@@ -5,15 +5,8 @@ import { MatIcon } from '@angular/material/icon';
 import { NgFor, NgIf } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
+import { UsersService } from '../users.service';
 
-interface Candidate {
-  id: number;
-  name: string;
-  moto: string;
-  photo: string;
-  photodisplacement: string;
-  crimes: string;
-}
 
 @Component({
   selector: 'app-candidates',
@@ -23,22 +16,38 @@ interface Candidate {
   standalone: true,
 })
 export class CandidatesComponent implements OnInit {
+  readonly encodeURI = encodeURIComponent;
   candidateList: any[] = [];  // <-- Store the fetched data here
+  likedIds: string[] = JSON.parse(localStorage.getItem('likedUsers') || '[]');
 
-  constructor(private http: HttpClient) {}  // <-- Inject HttpClient
+  constructor(private usersService:UsersService) {}  // <-- Inject HttpClient
 
   ngOnInit(): void {
-    // Fetch data from the backend API
-    
+    this.getCandidates();
   }
 
-  like(id: number): void {
-    // Your like button logic (no changes)
-    let child = $(`#like-${id}`).children()[1];
-    if (child.classList.contains('favicon')) {
-      child.classList.remove('favicon');
+  getCandidates(){
+    this.usersService.listCandidates().subscribe(data => {
+     this.candidateList=data
+    }, (err) => {
+      console.error('Error fetching candidates:', err);
+    });
+  }
+
+  like(id: string): void {
+    const isLiked = this.likedIds.includes(id);
+    if (isLiked) {
+      this.likedIds = this.likedIds.filter(likedId => likedId !== id);
+      this.usersService.removeLike(id).subscribe(() => {
+        console.log('Like removed successfully!');
+        localStorage.setItem('likedUsers', JSON.stringify(this.likedIds));
+      });
     } else {
-      child.classList.add('favicon');
+      this.likedIds.push(id);
+      this.usersService.addLike(id).subscribe(() => {
+        console.log('Like added successfully!');
+        localStorage.setItem('likedUsers', JSON.stringify(this.likedIds));
+      });
     }
   }
 }
